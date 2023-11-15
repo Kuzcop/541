@@ -35,19 +35,19 @@ hyperparameters = {
 def train(hyperparameters, show_summary = False):
     model = models.Sequential()
     activation, kernel_size, padding, strides, filters = hyperparameters['conv_1'].values()
-    model.add(layers.Conv2D(filters, kernel_size, activation=activation, input_shape=(filters, filters, 3)))
+    model.add(layers.Conv2D(filters = filters, kernel_size = kernel_size, activation=activation, padding = padding, strides = strides, input_shape=(filters, filters, 3)))
 
     pool_size, strides, padding = hyperparameters['pool_1'].values()
-    model.add(layers.MaxPooling2D(pool_size))
+    model.add(layers.MaxPooling2D(pool_size, strides, padding))
 
     activation, kernel_size, padding, strides, filters = hyperparameters['conv_2'].values()
-    model.add(layers.Conv2D(filters, kernel_size, activation=activation))
+    model.add(layers.Conv2D(filters = filters, kernel_size = kernel_size, activation=activation, padding = padding, strides = strides))
 
     pool_size, strides, padding = hyperparameters['pool_2'].values()
-    model.add(layers.MaxPooling2D(pool_size))
+    model.add(layers.MaxPooling2D(pool_size, strides, padding))
 
     activation, kernel_size, padding, strides, filters = hyperparameters['conv_3'].values()
-    model.add(layers.Conv2D(filters, kernel_size, activation=activation))
+    model.add(layers.Conv2D(filters = filters, kernel_size = kernel_size, activation=activation, padding = padding, strides = strides))
     model.add(layers.Flatten())
     model.add(layers.Dense(filters, activation='relu'))
     model.add(layers.Dense(10))
@@ -72,7 +72,7 @@ def train(hyperparameters, show_summary = False):
     history = model.fit(train_images, train_labels, epochs=10, 
                         validation_data=(test_images, test_labels))
     
-    test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+    test_loss, test_acc = model.evaluate(test_images,  test_labels)
 
     return test_acc
     
@@ -80,7 +80,7 @@ def train(hyperparameters, show_summary = False):
 hyperparameters['conv_1'] = {
     'activation' : 'relu', # https://www.tensorflow.org/api_docs/python/tf/keras/activations
     'kernel_size':  3, # any int
-    'padding'    : 'same', # 'valid' or 'same'
+    'padding'    : 'valid', # 'valid' or 'same'
     'strides'    :  1, # int
     'filters'    :  32  # int
 }
@@ -88,7 +88,7 @@ hyperparameters['conv_1'] = {
 hyperparameters['conv_2'] = {
     'activation' : 'relu', # https://www.tensorflow.org/api_docs/python/tf/keras/activations
     'kernel_size':  3, # any int
-    'padding'    : 'same', # 'valid' or 'same'
+    'padding'    : 'valid', # 'valid' or 'same'
     'strides'    :  1, # int
     'filters'    :  64  # int
 }
@@ -96,21 +96,21 @@ hyperparameters['conv_2'] = {
 hyperparameters['conv_3'] = {
     'activation' : 'relu', # https://www.tensorflow.org/api_docs/python/tf/keras/activations
     'kernel_size':  3, # any int
-    'padding'    : 'same', # 'valid' or 'same'
+    'padding'    : 'valid', # 'valid' or 'same'
     'strides'    :  1, # int
     'filters'    :  64  # int
 }
 
 hyperparameters['pool_1'] = {
     'pool_size': 2 , # int
-    'strides'  : 1 , # int
-    'padding'  : 'same', # 'valid' or 'same'
+    'strides'  : 2 , # int
+    'padding'  : 'valid', # 'valid' or 'same'
 }
 
 hyperparameters['pool_2'] = {
     'pool_size': 2 , # int
-    'strides'  : 1 , # int
-    'padding'  : 'same', # 'valid' or 'same'
+    'strides'  : 2 , # int
+    'padding'  : 'valid', # 'valid' or 'same'
 }
 
 train(hyperparameters, True)
