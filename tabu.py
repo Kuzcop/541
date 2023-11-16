@@ -4,7 +4,7 @@ from itertools import combinations
 import math
 from copy import deepcopy
 from cnn import train
-from helper import hyperparameters, hp_set
+from helper import hyperparameters, hp_set, get_random_neighbouring_solution, objective
 
 class TS():
     def __init__(self, seed, tabu_length):

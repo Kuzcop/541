@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from copy import deepcopy
 import random
+# from cnn import train
 
 activation_set = [
     'relu',
