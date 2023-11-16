@@ -23,11 +23,6 @@ class TS():
             print("Initial Random Solution: {}".format(initial_solution))
         return initial_solution
 
-    def Objfun(self, solution, show = False):
-        objfun_value = train(solution, False)
-        if show == True:
-            print("\n","#"*8, "The Objective function value for {} is: {}".format(solution ,objfun_value),"#"*8)
-        return objfun_value
 
     def get_neighbours_and_evaluate(self, solution):     
 
@@ -35,18 +30,7 @@ class TS():
         for i in range(self.num_neighbours):
             while True:
                 is_tabu = False
-                neighbour = deepcopy(solution)
-                layers_to_change = rd.sample(list(neighbour.keys()), k = 3)
-
-                for layer in layers_to_change:
-                    if 'conv' in layer:
-                        hps = rd.sample(list(neighbour[layer].keys()), k = 2)
-                        for hp in hps:
-                            neighbour[layer][hp] = rd.sample(hp_set[hp], k = 1)[0]
-                    else:
-                        hps = rd.sample(list(neighbour[layer].keys()), k = 1)
-                        for hp in hps:
-                            neighbour[layer][hp] = rd.sample(hp_set[hp], k = 1)[0]
+                neighbour = get_random_neighbouring_solution(solution, rd)
                 
                 for sol in self.tabu_list:
                     if neighbour == sol:
@@ -58,7 +42,7 @@ class TS():
         best_neighbour = {}
         best_accuracy = 0
         for neighbour in neighbours:
-            val = self.Objfun(neighbour)
+            val = objective(neighbour)
             if val > best_accuracy:
                 best_accuracy = val
                 best_neighbour = deepcopy(neighbour)
@@ -71,7 +55,7 @@ class TS():
         # Parameters:
         tenure =self.tabu_length
         best_solution = self.Initial_solution
-        best_objvalue = self.Objfun(best_solution)
+        best_objvalue = objective(best_solution)
         current_solution = {}
         current_objvalue = 0
 

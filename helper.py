@@ -77,6 +77,29 @@ hyperparameters['pool_2'] = {
 }
 
 
+def objective(params, show=False):
+    obj_value = train(params, False)
+    if show:
+        print("\n", "#" * 8, "The Objective function value for {} is: {}".format(params, obj_value), "#" * 8)
+    return obj_value
+
+
+def get_random_neighbouring_solution(solution, rd):
+    neighbour = deepcopy(solution)
+    layers_to_change = rd.sample(list(neighbour.keys()), k=3)
+
+    for layer in layers_to_change:
+        if 'conv' in layer:
+            hps = rd.sample(list(neighbour[layer].keys()), k=2)
+            for hp in hps:
+                neighbour[layer][hp] = rd.sample(hp_set[hp], k=1)[0]
+        else:
+            hps = rd.sample(list(neighbour[layer].keys()), k=1)
+            for hp in hps:
+                neighbour[layer][hp] = rd.sample(hp_set[hp], k=1)[0]
+    return neighbour
+
+
 ##########################COPY ABOVE#####################################
 
 # random.seed(0)
