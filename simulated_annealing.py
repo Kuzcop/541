@@ -18,7 +18,7 @@ def simulated_annealing(iterations, c, seed=2012, show=False):
     return current_solution, current_eval
 
 def _accept_worse_solution(c, interval, curr_val, next_val):
-    return rd.random < exp(interval * (next_val - curr_val)/ (c * curr_val))
+    return rd.random() < exp(interval * (next_val - curr_val)/ (c * curr_val))
 
 
 res, res_eval = simulated_annealing(100, 1, show=True)
