@@ -1,7 +1,10 @@
 import matplotlib.pyplot as plt
 from copy import deepcopy
 import random
+from datetime import datetime
 # from cnn import train
+import re
+import ast
 
 activation_set = [
     'relu',
@@ -82,6 +85,10 @@ def objective(params, show=False):
     obj_value = train(params, False)
     if show:
         print("\n", "#" * 8, "The Objective function value for {} is: {}".format(params, obj_value), "#" * 8)
+    
+    with open(log_dir, 'a+') as f:
+        result = {'HP': params, 'Accuracy': obj_value}
+        print(result, file=f)
     return obj_value
 
 
@@ -100,7 +107,32 @@ def get_random_neighbouring_solution(solution, rd):
                 neighbour[layer][hp] = rd.sample(hp_set[hp], k=1)[0]
     return neighbour
 
+def get_file_name():
+    # get current date and time
+    file_name = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+    return file_name
 
+log_dir = "meta_results/" + get_file_name() + '.txt'
+
+def get_predictor_data(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+
+    hps = []
+    accuracies =[]
+    for line in lines:
+        line = line.strip()
+        result = ast.literal_eval(line)
+        hps.append(result['HP'])
+        accuracies.append(result['Accuracy'])
+    print(hps)
+    print(accuracies)
+    return hps, accuracies
+
+if __name__ == '__main__':
+    file_name = 'meta_results/2023-11-16_16-40-57.txt'
+
+    get_predictor_data(file_name)
 ##########################COPY ABOVE#####################################
 
 # random.seed(0)

@@ -3,8 +3,8 @@ import random as rd
 from itertools import combinations
 import math
 from copy import deepcopy
-from cnn import train
-from helper import hyperparameters, hp_set, get_random_neighbouring_solution, objective
+# from cnn import train
+# from helper import hyperparameters, hp_set, get_random_neighbouring_solution, objective
 
 class TS():
     def __init__(self, seed, tabu_length):
@@ -63,10 +63,9 @@ class TS():
 
         print("#"*30, "Short-term memory TS with Tabu Tenure: {}\nInitial Solution: {}, Initial Objvalue: {}".format(tenure, best_solution, best_objvalue), "#"*30, sep='\n\n')
         Terminate = 0
+        count = 0
         while Terminate < 100:
-            print('\n\n### iter {}###  Current_Objvalue: {}, Best_Objvalue: {}'.format(iter, current_objvalue,
-                                                                                    best_objvalue))
-            # Searching the whole neighborhood of the current solution:
+            print('\n\n### Iteration: {}###  Current_Objvalue: {}, Best_Objvalue: {}'.format(Terminate, current_objvalue, best_objvalue))
             current_solution, current_objvalue, neighbours = self.get_neighbours_and_evaluate(best_solution)
             if len(self.tabu_list) == self.tabu_length:
                 del self.tabu_list[:5]
@@ -75,6 +74,11 @@ class TS():
             if current_objvalue > best_objvalue:
                 best_objvalue = current_objvalue
                 best_solution = current_solution
+                count = 0
+            else:
+                count += 1
+            if count == 10:
+                break
 
             Terminate += 1
             
@@ -83,4 +87,6 @@ class TS():
         return best_solution, best_objvalue
 
 
-test = TS(seed = 2012, tabu_length = 30)
+test = TS(seed = 2012, tabu_length = 50)
+
+print(test.Best_objvalue, test.Best_solution)
