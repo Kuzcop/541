@@ -31,6 +31,8 @@ class TS():
             while True:
                 is_tabu = False
                 neighbour = get_random_neighbouring_solution(solution, rd)
+                while neighbour in neighbours:
+                    neighbour = get_random_neighbouring_solution(solution, rd)
                 
                 for sol in self.tabu_list:
                     if neighbour == sol:
