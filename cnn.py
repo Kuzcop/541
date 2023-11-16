@@ -4,6 +4,17 @@ from tensorflow.keras import datasets, layers, models
 import matplotlib.pyplot as plt
 from copy import deepcopy
 
+# gpus = tf.config.list_physical_devices('GPU')
+# if gpus:
+#   # Restrict TensorFlow to only use the first GPU
+#   try:
+#     tf.config.set_visible_devices(gpus[0], 'GPU')
+#     logical_gpus = tf.config.list_logical_devices('GPU')
+#     print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPU")
+#   except RuntimeError as e:
+#     # Visible devices must be set before GPUs have been initialized
+#     print(e)
+
 (train_images, train_labels), (test_images, test_labels) = datasets.cifar10.load_data()
 
 # Normalize pixel values to be between 0 and 1
@@ -47,7 +58,7 @@ def train(hyperparameters, show_summary = False):
                 loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
                 metrics=['accuracy'])
 
-    history = model.fit(train_images, train_labels, epochs=10, 
+    history = model.fit(train_images, train_labels, epochs=10, batch_size = 16, 
                         validation_data=(test_images, test_labels))
     
     test_loss, test_acc = model.evaluate(test_images,  test_labels)

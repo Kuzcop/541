@@ -3,8 +3,8 @@ import random as rd
 from itertools import combinations
 import math
 from copy import deepcopy
-# from cnn import train
-# from helper import hyperparameters, hp_set
+from cnn import train
+from helper import hyperparameters, hp_set
 
 class TS():
     def __init__(self, seed, tabu_length):
@@ -55,6 +55,8 @@ class TS():
                 if not is_tabu:
                     break
             neighbours.append(neighbour)
+
+        assert len(neighbours) == self.num_neighbours
         best_neighbour = {}
         best_accuracy = 0
         for neighbour in neighbours:
