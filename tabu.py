@@ -7,32 +7,26 @@ from copy import deepcopy
 # from helper import hyperparameters, hp_set, get_random_neighbouring_solution, objective
 
 class TS():
-    def __init__(self, seed, tabu_length):
-        self.seed = seed
+    def __init__(self, initial_solution, neighbour_gen_fun, objective_fun, seed, tabu_length):
+        rd.seed(seed)
+
         self.tabu_list = []
         self.num_neighbours = 5
         self.tabu_length = tabu_length
-        self.Initial_solution = self.get_InitialSolution()
+        self.Initial_solution = initial_solution
+        self.neighbour_gen_fun = neighbour_gen_fun
+        self.objective_fun = objective_fun
+
         self.Best_solution, self.Best_objvalue = self.TSearch()
 
-    def get_InitialSolution(self, show=False):
-        initial_solution = hyperparameters
-        rd.seed(self.seed)
-        
-        if show == True:
-            print("Initial Random Solution: {}".format(initial_solution))
-        return initial_solution
-
-
-    def get_neighbours_and_evaluate(self, solution):     
-
+    def get_neighbours_and_evaluate(self, solution):
         neighbours = []
         for i in range(self.num_neighbours):
             while True:
                 is_tabu = False
-                neighbour = get_random_neighbouring_solution(solution, rd)
+                neighbour = self.neighbour_gen_fun(solution, rd)
                 while neighbour in neighbours:
-                    neighbour = get_random_neighbouring_solution(solution, rd)
+                    neighbour = self.neighbour_gen_fun(solution, rd)
                 
                 for sol in self.tabu_list:
                     if neighbour == sol:
@@ -46,7 +40,7 @@ class TS():
         best_neighbour = {}
         best_accuracy = 0
         for neighbour in neighbours:
-            val = objective(neighbour)
+            val = self.objective_fun(neighbour)
             if val > best_accuracy:
                 best_accuracy = val
                 best_neighbour = deepcopy(neighbour)
@@ -59,7 +53,7 @@ class TS():
         # Parameters:
         tenure =self.tabu_length
         best_solution = self.Initial_solution
-        best_objvalue = objective(best_solution)
+        best_objvalue = self.objective_fun(best_solution)
         current_solution = {}
         current_objvalue = 0
 
