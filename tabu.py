@@ -83,6 +83,6 @@ class TS():
         return best_solution, best_objvalue
 
 
-test = TS(seed = 2012, tabu_length = 50)
+test = TS(hyperparameters, get_random_neighbouring_solution, objective, seed = 2012, tabu_length = 50)
 
 print(test.Best_objvalue, test.Best_solution)
