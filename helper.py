@@ -82,13 +82,17 @@ hyperparameters['pool_2'] = {
 
 
 def objective(params, show=False):
-    obj_value = train(params, False)
-    if show:
-        print("\n", "#" * 8, "The Objective function value for {} is: {}".format(params, obj_value), "#" * 8)
-    
-    with open(log_dir, 'a+') as f:
-        result = {'HP': params, 'Accuracy': obj_value}
-        print(result, file=f)
+    try:
+        obj_value = train(params, False)
+        if show:
+            print("\n", "#" * 8, "The Objective function value for {} is: {}".format(params, obj_value), "#" * 8)
+        
+        with open(log_dir, 'a+') as f:
+            result = {'HP': params, 'Accuracy': obj_value}
+            print(result, file=f)
+    except:
+        print("Bad Params: {}".format(params))
+        obj_value = -1
     return obj_value
 
 
