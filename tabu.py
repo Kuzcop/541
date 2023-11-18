@@ -1,11 +1,12 @@
 import random as rd
 from copy import deepcopy
-from helper import cnn_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective
+from cnn_helper import cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective
 
 
 class TS:
-    def __init__(self, initial_solution, neighbour_gen_fun, objective_fun, seed, tabu_length):
-        rd.seed(seed)
+    def __init__(self, initial_solution, neighbour_gen_fun, objective_fun, tabu_length, seed=-1):
+        if (seed >= 0):
+            rd.seed(seed)
 
         self.tabu_list = []
         self.num_neighbours = 5
@@ -51,7 +52,6 @@ class TS:
         tenure =self.tabu_length
         best_solution = self.Initial_solution
         best_objvalue = self.objective_fun(best_solution)
-        current_solution = {}
         current_objvalue = 0
 
         print("#"*30, "Short-term memory TS with Tabu Tenure: {}\nInitial Solution: {}, Initial Objvalue: {}".format(tenure, best_solution, best_objvalue), "#"*30, sep='\n\n')
@@ -79,6 +79,6 @@ class TS:
         return best_solution, best_objvalue
 
 
-test = TS(cnn_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, seed = 2012, tabu_length = 50)
+test = TS(cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, tabu_length = 50, seed = 2012)
 
 print(test.Best_objvalue, test.Best_solution)
