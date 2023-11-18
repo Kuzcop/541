@@ -79,7 +79,7 @@ cnn_hyperparameters['pool_2'] = {
 def cnn_objective(params, show=False):
     try:
         test_acc, test_time = train(params, False)
-        obj_value = test_acc * test_time
+        obj_value = test_acc / test_time
         if show:
             print("\n", "#" * 8, "The Objective function value for {} is: {}".format(params, obj_value), "#" * 8)
         
