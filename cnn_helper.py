@@ -78,7 +78,7 @@ def cnn_objective(params, show=False):
             print("\n", "-" * 8, "model = {} #### accuracy = {} #### test_latency = {} #### objective = {}".format(params, test_acc, test_time, obj_value), "-" * 8)
 
         with open(_get_log_file_path(), 'a+') as f:
-            result = {'HP': params, 'Accuracy': obj_value}
+            result = {'HP': params, 'Accuracy': test_acc, 'Latency: ': test_time}
             print(result, file=f)
     except ValueError:
         print("Bad Params: {}".format(params))
