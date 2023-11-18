@@ -81,7 +81,7 @@ def cnn_objective(params, show=False):
         test_acc, test_time = train(params, False)
         obj_value = test_acc / test_time
         if show:
-            print("\n", "#" * 8, "The Objective function value for {} is: {}".format(params, obj_value), "#" * 8)
+            print("\n", "-" * 8, "model = {} #### accuracy = {} #### test_latency = {} #### objective = {}".format(params, test_acc, test_time, obj_value), "-" * 8)
         
         with open(log_dir, 'a+') as f:
             result = {'HP': params, 'Accuracy': obj_value}
