@@ -83,7 +83,8 @@ hyperparameters['pool_2'] = {
 
 def objective(params, show=False):
     try:
-        obj_value = train(params, False)
+        test_acc, test_time = train(params, False)
+        obj_value = test_acc * test_time
         if show:
             print("\n", "#" * 8, "The Objective function value for {} is: {}".format(params, obj_value), "#" * 8)
         
@@ -111,12 +112,14 @@ def get_random_neighbouring_solution(solution, rd):
                 neighbour[layer][hp] = rd.sample(hp_set[hp], k=1)[0]
     return neighbour
 
+
 def get_file_name():
     # get current date and time
     file_name = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
     return file_name
 
 log_dir = "meta_results/" + get_file_name() + '.txt'
+
 
 def get_predictor_data(filename):
     with open(filename, 'r') as f:
@@ -132,6 +135,7 @@ def get_predictor_data(filename):
     print(hps)
     print(accuracies)
     return hps, accuracies
+
 
 if __name__ == '__main__':
     file_name = 'meta_results/2023-11-16_16-40-57.txt'
