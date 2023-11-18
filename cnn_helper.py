@@ -77,7 +77,7 @@ def cnn_objective(params, show=False):
         if show:
             print("\n", "-" * 8, "model = {} #### accuracy = {} #### test_latency = {} #### objective = {}".format(params, test_acc, test_time, obj_value), "-" * 8)
 
-        with open(get_log_file_path(), 'a+') as f:
+        with open(_get_log_file_path(), 'a+') as f:
             result = {'HP': params, 'Accuracy': obj_value}
             print(result, file=f)
     except ValueError:
@@ -102,7 +102,7 @@ def cnn_get_random_neighbouring_solution(solution, rd):
     return neighbour
 
 
-def get_log_file_path():
+def _get_log_file_path():
     # get current date and time
     file_name = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
     return "meta_results/" + file_name + '.txt'
