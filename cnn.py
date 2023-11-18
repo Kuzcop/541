@@ -67,9 +67,12 @@ def train(hyperparameters, show_summary = False):
     end_time = time.time()
     test_time = end_time - start_time
     return test_acc, test_time
-    
+
 
 ##########################COPY ABOVE#####################################
+
+########################## TESTING ######################################
+
 if __name__ == '__main__':
     conv = {
         'activation' : '', # https://www.tensorflow.org/api_docs/python/tf/keras/activations

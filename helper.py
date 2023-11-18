@@ -1,9 +1,6 @@
-import matplotlib.pyplot as plt
 from copy import deepcopy
-import random
 from datetime import datetime
-# from cnn import train
-import re
+from cnn import train
 import ast
 
 activation_set = [
@@ -15,30 +12,28 @@ activation_set = [
     'softmax'
 ]
 
-padding_set = [
-    'valid',
-    'same'
-]
 
-kernel_size_set = list(range(2,6))
-
-filters_set = list(range(10, 101))
-
-strides_set = list(range(1,4))
-
-pool_size_set = list(range(1,5))
-
-hp_set = {
+cnn_hp_set = {
     'activation' : activation_set,
-    'kernel_size': kernel_size_set,
-    'padding'    : padding_set,
-    'strides'    : strides_set,
-    'filters'    : filters_set,
-    'pool_size'  : pool_size_set
+    'kernel_size': list(range(2,6)),
+    'padding'    : ['valid', 'same'],
+    'strides'    : list(range(1,4)),
+    'filters'    : list(range(10, 101)),
+    'pool_size'  : list(range(1,5))
+}
+
+predictor_layer_hp_set = {
+    'activation': activation_set,
+    'size': list(range(10, 100)) #TODO: find good limits
+}
+
+predictor_layer_hyperparameters = {
+    'activation': activation_set[0],
+    'size': 50
 }
 
 # When editing hyperparameters in metaheurisitcs, we know how to change each hyperparameter in each layer via the key name (activation, pool_size, etc.)
-hyperparameters = {
+cnn_hyperparameters = {
     'conv_1': 0,
     'pool_1': 0,
     'conv_2': 0,
@@ -47,41 +42,41 @@ hyperparameters = {
 }
     
 
-hyperparameters['conv_1'] = {
+cnn_hyperparameters['conv_1'] = {
     'activation' : 'relu', # https://www.tensorflow.org/api_docs/python/tf/keras/activations
     'kernel_size':  3, # any int
     'padding'    : 'valid', # 'valid' or 'same'
     'filters'    :  32  # int
 }
 
-hyperparameters['conv_2'] = {
+cnn_hyperparameters['conv_2'] = {
     'activation' : 'relu', # https://www.tensorflow.org/api_docs/python/tf/keras/activations
     'kernel_size':  3, # any int
     'padding'    : 'valid', # 'valid' or 'same'
     'filters'    :  64  # int
 }
 
-hyperparameters['conv_3'] = {
+cnn_hyperparameters['conv_3'] = {
     'activation' : 'relu', # https://www.tensorflow.org/api_docs/python/tf/keras/activations
     'kernel_size':  3, # any int
     'padding'    : 'valid', # 'valid' or 'same'
     'filters'    :  64  # int
 }
 
-hyperparameters['pool_1'] = {
+cnn_hyperparameters['pool_1'] = {
     'pool_size': 2 , # int
     'strides'  : 2 , # int
     'padding'  : 'valid', # 'valid' or 'same'
 }
 
-hyperparameters['pool_2'] = {
+cnn_hyperparameters['pool_2'] = {
     'pool_size': 2 , # int
     'strides'  : 2 , # int
     'padding'  : 'valid', # 'valid' or 'same'
 }
 
 
-def objective(params, show=False):
+def cnn_objective(params, show=False):
     try:
         test_acc, test_time = train(params, False)
         obj_value = test_acc * test_time
@@ -97,7 +92,7 @@ def objective(params, show=False):
     return obj_value
 
 
-def get_random_neighbouring_solution(solution, rd):
+def cnn_get_random_neighbouring_solution(solution, rd):
     neighbour = deepcopy(solution)
     layers_to_change = rd.sample(list(neighbour.keys()), k=3)
 
@@ -105,11 +100,11 @@ def get_random_neighbouring_solution(solution, rd):
         if 'conv' in layer:
             hps = rd.sample(list(neighbour[layer].keys()), k=2)
             for hp in hps:
-                neighbour[layer][hp] = rd.sample(hp_set[hp], k=1)[0]
+                neighbour[layer][hp] = rd.sample(cnn_hp_set[hp], k=1)[0]
         else:
             hps = rd.sample(list(neighbour[layer].keys()), k=1)
             for hp in hps:
-                neighbour[layer][hp] = rd.sample(hp_set[hp], k=1)[0]
+                neighbour[layer][hp] = rd.sample(cnn_hp_set[hp], k=1)[0]
     return neighbour
 
 
@@ -141,6 +136,8 @@ if __name__ == '__main__':
     file_name = 'meta_results/2023-11-16_16-40-57.txt'
 
     get_predictor_data(file_name)
+
+
 ##########################COPY ABOVE#####################################
 
 # random.seed(0)

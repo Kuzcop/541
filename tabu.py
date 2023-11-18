@@ -1,12 +1,9 @@
-import pandas as pd
 import random as rd
-from itertools import combinations
-import math
 from copy import deepcopy
-# from cnn import train
-# from helper import hyperparameters, hp_set, get_random_neighbouring_solution, objective
+from helper import cnn_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective
 
-class TS():
+
+class TS:
     def __init__(self, initial_solution, neighbour_gen_fun, objective_fun, seed, tabu_length):
         rd.seed(seed)
 
@@ -77,12 +74,11 @@ class TS():
                 break
 
             Terminate += 1
-            
-            
-        print('#'*50 , "Performed iterations: {}".format(Terminate), "Best found Solution: {} , Objvalue: {}".format(best_solution,best_objvalue), sep="\n")
+
+        print('#'*50, "Performed iterations: {}".format(Terminate), "Best found Solution: {} , Objvalue: {}".format(best_solution,best_objvalue), sep="\n")
         return best_solution, best_objvalue
 
 
-test = TS(hyperparameters, get_random_neighbouring_solution, objective, seed = 2012, tabu_length = 50)
+test = TS(cnn_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, seed = 2012, tabu_length = 50)
 
 print(test.Best_objvalue, test.Best_solution)

@@ -1,5 +1,6 @@
 import random as rd
 from numpy import exp
+from helper import cnn_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective
 
 
 def simulated_annealing(initial_solution, neighbour_gen_fun, objective_fun, iterations, c, seed=-1, show=False):
@@ -24,7 +25,7 @@ def _accept_worse_solution(c, interval, curr_val, next_val):
     return rd.random() < exp(interval * (next_val - curr_val)/ (c * curr_val))
 
 
-res, res_eval = simulated_annealing(hyperparameters, get_random_neighbouring_solution, objective, 100, 1, show=True)
+res, res_eval = simulated_annealing(cnn_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, 100, 1, show=True)
 print('#' * 50, "Performed iterations: {}".format(100),
       "Best found Solution: {} , Objvalue: {}".format(res, res_eval), sep="\n")
 
