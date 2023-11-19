@@ -36,6 +36,7 @@ class TS:
 
                 if neighbour not in self.tabu_list:
                     if (diff in self.tabu_conditions) and (not self.diversification):
+                        print('Tabu Solution')
                         continue
                     else:
                         break
@@ -91,6 +92,7 @@ class TS:
                 count = 0
                 self.diversification = False
                 self.tabu_length = tenure
+                Terminate += 1
             elif (current_objvalue < best_objvalue) and (current_objvalue != -1):
                 count += 1
                 Terminate += 1
