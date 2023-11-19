@@ -77,28 +77,34 @@ def cnn_objective(params, show=False):
         if show:
             print("\n", "-" * 8, "model = {} #### accuracy = {} #### test_latency = {} #### objective = {}".format(params, test_acc, test_time, obj_value), "-" * 8)
 
-        with open(_get_log_file_path(), 'a+') as f:
+        with open(file_name, 'a+') as f:
             result = {'HP': params, 'Accuracy': test_acc, 'Latency: ': test_time}
             print(result, file=f)
-    except ValueError:
+    except Exception as e:
+        print(e)
         print("Bad Params: {}".format(params))
         obj_value = -1
     return obj_value
 
 
-def cnn_get_random_neighbouring_solution(solution, rd):
+def cnn_get_random_neighbouring_solution(solution, rd, is_TS = False):
     neighbour = deepcopy(solution)
     layers_to_change = rd.sample(list(neighbour.keys()), k=3)
+    diff = {}
 
     for layer in layers_to_change:
         if 'conv' in layer:
             hps = rd.sample(list(neighbour[layer].keys()), k=2)
+            diff[layer] = hps
             for hp in hps:
                 neighbour[layer][hp] = rd.sample(cnn_hp_set[hp], k=1)[0]
         else:
             hps = rd.sample(list(neighbour[layer].keys()), k=1)
+            diff[layer] = hps
             for hp in hps:
                 neighbour[layer][hp] = rd.sample(cnn_hp_set[hp], k=1)[0]
+    if is_TS:
+        return neighbour, diff
     return neighbour
 
 
@@ -107,7 +113,7 @@ def _get_log_file_path():
     file_name = str(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
     return "meta_results/" + file_name + '.txt'
 
-
+file_name = _get_log_file_path()
 
 
 ##########################COPY ABOVE#####################################
