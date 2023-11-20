@@ -17,7 +17,7 @@ cnn_hp_set = {
     'kernel_size': list(range(2,6)),
     'padding'    : ['valid', 'same'],
     'strides'    : list(range(1,4)),
-    'filters'    : list(range(10, 101)),
+    'filters'    : [20, 40, 60, 80, 100],
     'pool_size'  : list(range(1,5))
 }
 
@@ -105,6 +105,21 @@ def cnn_get_random_neighbouring_solution(solution, rd, is_TS = False):
                 neighbour[layer][hp] = rd.sample(cnn_hp_set[hp], k=1)[0]
     if is_TS:
         return neighbour, diff
+    return neighbour
+
+def cnn_preturb(solution, rd):
+    neighbour = deepcopy(solution)
+    layers_to_change = rd.sample(list(neighbour.keys()), k=len(solution))
+
+    for layer in layers_to_change:
+        if 'conv' in layer:
+            hps = rd.sample(list(neighbour[layer].keys()), k=3)
+            for hp in hps:
+                neighbour[layer][hp] = rd.sample(cnn_hp_set[hp], k=1)[0]
+        else:
+            hps = rd.sample(list(neighbour[layer].keys()), k=2)
+            for hp in hps:
+                neighbour[layer][hp] = rd.sample(cnn_hp_set[hp], k=1)[0]
     return neighbour
 
 
