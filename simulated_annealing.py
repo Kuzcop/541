@@ -5,7 +5,7 @@ from cnn_helper import cnn_default_hyperparameters, cnn_get_random_neighbouring_
 
 def simulated_annealing(initial_solution, neighbour_gen_fun, objective_fun, iterations, c, seed=-1, show=False):
     # Initialization phase
-    if (seed >= 0):
+    if seed >= 0:
         rd.seed = seed
     current_solution = initial_solution
     current_eval = objective_fun(current_solution, show)

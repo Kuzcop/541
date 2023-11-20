@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 #     # Visible devices must be set before GPUs have been initialized
 #     print(e)
 
+
 class Predictor:
     def __init__(self, n_layers, keras_loss_fun, hyperparameters, show_summary=False):
         # Hyperparameters:
@@ -43,6 +44,4 @@ class Predictor:
         test_loss, test_acc = self.model.evaluate(test_data, test_labels)
         end_time = time.time()
         test_time = end_time - start_time
-        return test_acc, test_time
-
         return test_acc, test_time
