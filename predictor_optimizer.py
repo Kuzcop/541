@@ -1,8 +1,10 @@
+import predictor_helper
 from predictor_helper import *
 from simulated_annealing import simulated_annealing
 
 
 def optimize_predictor(optimize_fun):
+    predictor_helper.predictor_data_filename = "meta_results/2023-11-18_23-43-37.txt"  #TODO: Specify
     best_results = {}
 
     for n_layers in predictor_n_layer_set:

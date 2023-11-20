@@ -2,6 +2,43 @@ import ast
 import tensorflow as tf
 from predictor import Predictor
 from copy import deepcopy
+import random
+
+# TRAIN AND TEST DATA
+def _get_predictor_data(filename):
+    hyperparameters, outputs = _parse_predictor_data_file(filename)
+
+    dataset_size = len(hyperparameters)
+    train_percentage = 0.7
+    train_size = round(dataset_size * train_percentage)
+
+    dataset_indexes = range(0, dataset_size)
+    train_sample_indexes = random.sample(dataset_indexes, train_size)
+    test_sample_indexes = [index for index in dataset_indexes if index not in train_sample_indexes]
+
+    train_data, train_labels = [(hyperparameters[i], outputs[i]) for i in train_sample_indexes]
+    test_data, test_labels = [(hyperparameters[i], outputs[i]) for i in test_sample_indexes]
+
+    return train_data, train_labels, test_data, test_labels
+
+
+def _parse_predictor_data_file(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+
+    hyperparameters = []
+    outputs = []  # Output  = (accuracy, latency)
+    for line in lines:
+        line = line.strip()
+        result = ast.literal_eval(line)
+        hyperparameters.append(result['HP'])
+        outputs.append((result['Accuracy'], result['Latency']))
+
+    return hyperparameters, outputs
+
+
+predictor_data_filename = "INVALID FILENAME: SPECIFY BEFORE TRAINING PREDICTOR"
+training_data, training_labels, testing_data, testing_labels = _get_predictor_data(predictor_data_filename)
 
 predictor_loss_set = [
     'mean_squared_error',
@@ -38,9 +75,6 @@ def get_default_predictor(n_layers, loss):
         "hyperparameters": [deepcopy(predictor_layer_default_hyperparameters) for _ in range(0, n_layers)]
     }
 
-training_data, training_labels, test_data, test_labels = get_predictor_data()
-
-
 def predictor_objective(params):
     n_layers = params["n_layers"]
     keras_loss_fun = params["keras_loss_fun"]
@@ -70,17 +104,3 @@ def predictor_get_random_neighbouring_solution(old_solution, rd):
     solution["hyperparameters"][change_activation_layer]["activation"] = new_activation
 
     return solution
-
-
-def get_predictor_data(filename):
-    # TODO
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-
-    hps = []
-    accuracies =[]
-    for line in lines:
-        line = line.strip()
-        result = ast.literal_eval(line)
-        hps.append(result['HP'])
-        accuracies.append(result['Accuracy'])
