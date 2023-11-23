@@ -28,11 +28,6 @@ class TS:
                 neighbour, diff = self.neighbour_gen_fun(solution, rd, True)
                 while neighbour in neighbours:
                     neighbour, diff = self.neighbour_gen_fun(solution, rd, True)
-                
-                # if not self.diversification:
-                #     for con in self.tabu_conditions:
-                #         if con == diff:
-                #             is_tabu
 
                 if neighbour not in self.tabu_list:
                     if (diff in self.tabu_conditions) and (not self.diversification):
@@ -41,12 +36,6 @@ class TS:
                     else:
                         break
 
-                # for sol in self.tabu_list:
-                #     if neighbour == sol:
-                #         is_tabu = True
-                #         break
-                # if not is_tabu:
-                #     break
             neighbours.append(neighbour)
             diffs.append(diff)
 
@@ -83,7 +72,7 @@ class TS:
             while len(self.tabu_list) > self.tabu_length:
                 del self.tabu_list[0]
             
-            while len(self.tabu_conditions) > 10:
+            while len(self.tabu_conditions) > 5:
                 del self.tabu_conditions[0]
 
             if current_objvalue > best_objvalue:
@@ -96,10 +85,10 @@ class TS:
             elif (current_objvalue < best_objvalue) and (current_objvalue != -1):
                 count += 1
                 Terminate += 1
-            if count == 5:
-                self.diversification = True
-                self.tabu_length = tenure/2
             if count == 10:
+                self.diversification = True
+                self.tabu_length = tenure*2
+            if count == 20:
                 break
 
         print('#'*50, "Performed iterations: {}".format(Terminate), "Best found Solution: {} , Objvalue: {}".format(best_solution,best_objvalue), sep="\n")
