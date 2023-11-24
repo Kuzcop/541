@@ -4,6 +4,7 @@ from predictor import Predictor
 from copy import deepcopy
 import random
 
+
 # TRAIN AND TEST DATA
 def _get_predictor_data(filename):
     hyperparameters, outputs = _parse_predictor_data_file(filename)
@@ -49,21 +50,19 @@ predictor_loss_set = [
 
 predictor_n_layer_set = range(1, 10)
 
-predictor_activation_set = [
-    'relu',
-    'selu',
-    'tanh',
-    'linear',
-    'swish',
-]
-
 predictor_layer_hp_set = {
-    'activation': predictor_activation_set,
-    'size': list(range(10, 100)) #TODO: find good limits
+    'activation': [
+        'relu',
+        'selu',
+        'tanh',
+        'linear',
+        'swish',
+    ],
+    'size': list(range(10, 100))  # TODO: find good limits
 }
 
 predictor_layer_default_hyperparameters = {
-    'activation': predictor_activation_set[0],
+    'activation': predictor_layer_hp_set['activation'][0],
     'size': 50
 }
 
@@ -75,19 +74,24 @@ def get_default_predictor(n_layers, loss):
         "hyperparameters": [deepcopy(predictor_layer_default_hyperparameters) for _ in range(0, n_layers)]
     }
 
+
 def predictor_objective(params):
     n_layers = params["n_layers"]
     keras_loss_fun = params["keras_loss_fun"]
     hyperparameters = params["hyperparameters"]
     predictor = Predictor(n_layers, keras_loss_fun, hyperparameters)
 
-    test_acc, test_time = predictor.train(training_data, training_labels, test_data, test_labels)
+    test_acc, test_time = predictor.train(training_data, training_labels, testing_data, testing_labels)
 
-    obj_value = test_acc / test_time
+    obj_value = test_acc**2 / test_time
 
-    print("\n", "-" * 8, "model: {} #### test_accuracy: {} #### test_latency: {} #### objective: {}".format(params, test_acc, test_time, obj_value), "-" * 8)
+    print("\n", "-" * 8,
+          "model: {} #### test_accuracy: {} #### test_latency: {} #### objective: {}".format(params, test_acc,
+                                                                                             test_time, obj_value),
+          "-" * 8)
 
     return obj_value
+
 
 def predictor_get_random_neighbouring_solution(old_solution, rd):
     solution = deepcopy(old_solution)
