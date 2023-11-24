@@ -2,6 +2,8 @@ from tensorflow.keras import layers, models
 import time
 
 import matplotlib.pyplot as plt
+
+
 # gpus = tf.config.list_physical_devices('GPU')
 # if gpus:
 #   # Restrict TensorFlow to only use the first GPU
@@ -38,7 +40,7 @@ class Predictor:
     def train(self, train_data, train_labels, test_data, test_labels):
 
         history = self.model.fit(train_data, train_labels, epochs=10, batch_size=32,
-                            validation_data=(test_data, test_labels))
+                                 validation_data=(test_data, test_labels))
 
         start_time = time.time()
         test_loss, test_acc = self.model.evaluate(test_data, test_labels)
