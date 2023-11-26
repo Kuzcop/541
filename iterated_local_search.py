@@ -91,10 +91,10 @@ class ILS:
             elif (current_objvalue < best_objvalue) and (current_objvalue != -1):
                 count += 1
                 Terminate += 1
-            if count == 5:
-                self.diversification = True
-                self.ILS_length = tenure/2
             if count == 10:
+                self.diversification = True
+                self.ILS_length = tenure*2
+            if count == 20:
                 break
 
             starting_point = self.preturb_fun(starting_point, rd)

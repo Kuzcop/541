@@ -73,12 +73,12 @@ def cnn_objective(params, show=False):
     try:
         cnn = CNN(params)
         test_acc, test_time = cnn.train(cnn_train_images, cnn_train_labels, cnn_test_images, cnn_test_labels)
-        obj_value = test_acc / test_time
+        obj_value = test_acc*test_acc / test_time
         if show:
             print("\n", "-" * 8, "model = {} #### accuracy = {} #### test_latency = {} #### objective = {}".format(params, test_acc, test_time, obj_value), "-" * 8)
 
         with open(file_name, 'a+') as f:
-            result = {'HP': params, 'Accuracy': test_acc, 'Latency: ': test_time, 'Obj': obj_value}
+            result = {'HP': params, 'Accuracy': test_acc, 'Latency': test_time, 'Obj': obj_value}
             print(result, file=f)
     except Exception as e:
         print(e)
