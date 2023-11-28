@@ -1,6 +1,7 @@
 import random as rd
 from copy import deepcopy
-from cnn_helper import cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective
+from cnn_helper import cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, file_name
+import time
 
 
 class TS:
@@ -94,7 +95,14 @@ class TS:
         print('#'*50, "Performed iterations: {}".format(Terminate), "Best found Solution: {} , Objvalue: {}".format(best_solution,best_objvalue), sep="\n")
         return best_solution, best_objvalue
 
-
+start_time = time.time()
 test = TS(cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, tabu_length = 100)
+end_time = time.time()
 
-print(test.Best_objvalue, test.Best_solution)
+with open(file_name, 'a+') as f:
+    print('-' * 50, file=f)
+    print(end_time-start_time, file=f)
+    print(test.Best_solution, file=f)
+    print(test.Best_objvalue, file=f)
+
+print(test.Best_objvalue, test.Best_solution, end_time-start_time)

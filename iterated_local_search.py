@@ -1,7 +1,8 @@
 import random as rd
 from copy import deepcopy
-from cnn_helper import cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, cnn_preturb
+from cnn_helper import cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, cnn_preturb, file_name
 from numpy import exp
+import time
 
 class ILS:
     def __init__(self, initial_solution, neighbour_gen_fun, objective_fun, preturb_fun, ILS_length, c, seed=-1):
@@ -13,7 +14,7 @@ class ILS:
         self.c = c
         self.ILS_conditions = []
         self.diversification = False
-        self.num_neighbours = 10
+        self.num_neighbours = 5
         self.ILS_length = ILS_length
         self.Initial_solution = initial_solution
         self.neighbour_gen_fun = neighbour_gen_fun
@@ -77,7 +78,7 @@ class ILS:
             while len(self.ILS_list) > self.ILS_length:
                 del self.ILS_list[0]
             
-            while len(self.ILS_conditions) > 10:
+            while len(self.ILS_conditions) > 5:
                 del self.ILS_conditions[0]
 
             if (current_objvalue > best_objvalue) or (self._accept_worse_solution(Terminate+1, best_objvalue, current_objvalue)):
@@ -102,7 +103,14 @@ class ILS:
         print('#'*50, "Performed iterations: {}".format(Terminate), "Best found Solution: {} , Objvalue: {}".format(best_solution,best_objvalue), sep="\n")
         return best_solution, best_objvalue
 
-
+start_time = time.time()
 test = ILS(cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, cnn_preturb, ILS_length = 100, c = 1)
+end_time = time.time()
 
-print(test.Best_objvalue, test.Best_solution)
+with open(file_name, 'a+') as f:
+    print('-' * 50, file=f)
+    print(end_time-start_time, file=f)
+    print(test.Best_solution, file=f)
+    print(test.Best_objvalue, file=f)
+
+print(test.Best_objvalue, test.Best_solution, end_time-start_time)
