@@ -1,0 +1,2 @@
+{'HP': {'conv_1': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 32}, 'pool_1': {'pool_size': 2, 'strides': 2, 'padding': 'valid'}, 'conv_2': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 64}, 'pool_2': {'pool_size': 2, 'strides': 2, 'padding': 'valid'}, 'conv_3': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 64}}, 'Accuracy': 0.6891000270843506, 'Latency': 2.0115904808044434, 'Obj': 0.23606139115241523}
+203.20034861564636

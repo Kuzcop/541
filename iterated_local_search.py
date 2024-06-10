@@ -21,7 +21,7 @@ class ILS:
         self.preturb_fun = preturb_fun
         self.objective_fun = objective_fun
 
-        self.Best_solution, self.Best_objvalue = self.ILSearch()
+        self.Best_solution, self.Best_objvalue, self.iter = self.ILSearch()
 
     def _accept_worse_solution(self, interval, curr_val, next_val):
         return rd.random() < exp(interval * (next_val - curr_val) / (self.c * curr_val))
@@ -46,13 +46,13 @@ class ILS:
 
         assert len(neighbours) == self.num_neighbours
         best_neighbour = {}
-        best_accuracy = 0
+        best_accuracy = [-10]
         for neighbour, diff in zip(neighbours, diffs):
             val = self.objective_fun(neighbour)
-            if val > best_accuracy:
+            if val[0] > best_accuracy[0]:
                 best_accuracy = val
                 best_neighbour = deepcopy(neighbour)
-            elif val < 0.1:
+            elif val[0] < 0.1:
                 self.ILS_conditions.append(diff)
 
         return best_neighbour, best_accuracy, neighbours
@@ -63,7 +63,7 @@ class ILS:
         # Parameters:
         tenure =self.ILS_length
         best_solution = self.Initial_solution
-        best_objvalue = self.objective_fun(best_solution)
+        best_objvalue = self.objective_fun(best_solution)[0]
         current_objvalue = 0
         starting_point = self.Initial_solution
 
@@ -72,7 +72,12 @@ class ILS:
         count = 0
         while Terminate < 100:
             print('\n\n### Iteration: {}###  Memory {}, Diversification {}, Current_Objvalue: {}, Best_Objvalue: {}'.format(Terminate, len(self.ILS_list), self.diversification, current_objvalue, best_objvalue))
-            current_solution, current_objvalue, neighbours = self.get_neighbours_and_evaluate(starting_point)
+            current_solution, ex, neighbours = self.get_neighbours_and_evaluate(starting_point)
+
+            current_objvalue = ex[0]
+            acc = ex[1]
+            lat = ex[2]
+
 
             self.ILS_list = self.ILS_list + neighbours
             while len(self.ILS_list) > self.ILS_length:
@@ -89,6 +94,9 @@ class ILS:
                 self.ILS_length = tenure
                 Terminate += 1
                 print("\n", "#", "Accepted new solution")
+                with open(file_name, 'a+') as f:
+                    result = {'HP': best_solution, 'Accuracy': acc, 'Latency': lat, 'Obj': best_objvalue, 'iter': Terminate}
+                    print(result, file=f)
             elif (current_objvalue < best_objvalue) and (current_objvalue != -1):
                 count += 1
                 Terminate += 1
@@ -101,10 +109,11 @@ class ILS:
             starting_point = self.preturb_fun(starting_point, rd)
 
         print('#'*50, "Performed iterations: {}".format(Terminate), "Best found Solution: {} , Objvalue: {}".format(best_solution,best_objvalue), sep="\n")
-        return best_solution, best_objvalue
+        return best_solution, best_objvalue, Terminate
 
+seed = 0
 start_time = time.time()
-test = ILS(cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, cnn_preturb, ILS_length = 100, c = 1)
+test = ILS(cnn_default_hyperparameters, cnn_get_random_neighbouring_solution, cnn_objective, cnn_preturb, ILS_length = 100, seed=seed, c = 1)
 end_time = time.time()
 
 with open(file_name, 'a+') as f:
@@ -112,5 +121,7 @@ with open(file_name, 'a+') as f:
     print(end_time-start_time, file=f)
     print(test.Best_solution, file=f)
     print(test.Best_objvalue, file=f)
+    print(test.iter, file=f)
+    print(seed, file=f)
 
 print(test.Best_objvalue, test.Best_solution, end_time-start_time)

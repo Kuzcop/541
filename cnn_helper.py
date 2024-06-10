@@ -77,14 +77,13 @@ def cnn_objective(params, show=False):
         if show:
             print("\n", "-" * 8, "model = {} #### accuracy = {} #### test_latency = {} #### objective = {}".format(params, test_acc, test_time, obj_value), "-" * 8)
 
-        with open(file_name, 'a+') as f:
-            result = {'HP': params, 'Accuracy': test_acc, 'Latency': test_time, 'Obj': obj_value}
-            print(result, file=f)
     except Exception as e:
         print(e)
         print("Bad Params: {}".format(params))
         obj_value = -1
-    return obj_value
+        test_acc = -1
+        test_time = -1
+    return [obj_value, test_acc, test_time]
 
 
 def cnn_get_random_neighbouring_solution(solution, rd, is_TS = False):

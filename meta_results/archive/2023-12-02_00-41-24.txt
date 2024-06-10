@@ -1,0 +1,5 @@
+--------------------------------------------------
+0.0
+0
+0
+<bound method Random.seed of <random.Random object at 0x0000019AC7E1A620>>

@@ -1,0 +1,4 @@
+{'HP': {'conv_1': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 32}, 'pool_1': {'pool_size': 2, 'strides': 2, 'padding': 'valid'}, 'conv_2': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 64}, 'pool_2': {'pool_size': 2, 'strides': 2, 'padding': 'valid'}, 'conv_3': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 64}}, 'Accuracy': 0.6976000070571899, 'Latency': 1.743994951248169, 'Obj': 0.2790408134483998}
+209.0568926334381
+{'conv_1': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 32}, 'pool_1': {'pool_size': 2, 'strides': 2, 'padding': 'valid'}, 'conv_2': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 64}, 'pool_2': {'pool_size': 2, 'strides': 2, 'padding': 'valid'}, 'conv_3': {'activation': 'relu', 'kernel_size': 3, 'padding': 'valid', 'filters': 64}}
+0.2790408134483998
