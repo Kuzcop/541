@@ -67,11 +67,9 @@ We chose this definition as we want to optimize the trade-off between evaluation
 
 ## Results
 
-We evaluate candidate CNN solutions based on their accu-
-racy and their test latency, reflected in the objective function
+We evaluate candidate CNN solutions based on their accuracy and their test latency, reflected in the objective function
 shown in equation 1. CNNs are compiled in TensorFlow using
-the “adam” optimizer to minimize “SparseCategoricalCrossen-
-tropy” loss. CNNs are then trained on 50,000 32x32 images
+the “adam” optimizer to minimize “SparseCategoricalCrossentropy” loss. CNNs are then trained on 50,000 32x32 images
 for 10 epochs from the CIFAR10 dataset, and tested on 10,000
 unseen images. We run each metaheuristic 5 times and select
 the best-performing model in terms of accuracy and latency
