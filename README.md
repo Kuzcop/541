@@ -21,10 +21,8 @@ Inspired by our class discussion on “Metaheuristics in combinatorial optimizat
 
 In more detail, the project will entail the following tasks:
 1) Build a parametrizable CNN for image recognition trained on the CIFAR10 dataset.
-2) Build optimization algorithms for the CNN using differ-
-ent meta-heuristics.
-3) Optimize the parameters of the CNN using the optimiza-
-tion algorithms and compare the test accuracies for the
+2) Build optimization algorithms for the CNN using different meta-heuristics.
+3) Optimize the parameters of the CNN using the optimization algorithms and compare the test accuracies for the
 resulting sets of parameters.
 
 ## Setup
